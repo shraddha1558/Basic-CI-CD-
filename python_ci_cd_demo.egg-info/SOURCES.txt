@@ -1,0 +1,8 @@
+setup.py
+app/__init__.py
+app/calculator.py
+python_ci_cd_demo.egg-info/PKG-INFO
+python_ci_cd_demo.egg-info/SOURCES.txt
+python_ci_cd_demo.egg-info/dependency_links.txt
+python_ci_cd_demo.egg-info/top_level.txt
+tests/test_calculator.py
