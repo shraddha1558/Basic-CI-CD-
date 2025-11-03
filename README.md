@@ -11,14 +11,14 @@ It performs:
 
 This project is designed to help understand real-world CI/CD workflows for Python applications.
 
-# Project structure
+# Project Structure
 
 PYTHON-CI-CD-DEMO/
 │
 ├─ .github/workflows/ci-cd.yml # ✅ CI/CD pipeline
 │
 ├─ app/
-│ ├─ **init**.py
+│ ├─ init.py
 │ └─ calculator.py # Sample Python logic
 │
 ├─ tests/
