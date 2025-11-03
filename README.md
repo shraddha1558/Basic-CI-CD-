@@ -13,24 +13,7 @@ This project is designed to help understand real-world CI/CD workflows for Pytho
 
 # Project Structure
 
-PYTHON-CI-CD-DEMO/
-│
-├─ .github/workflows/ci-cd.yml # ✅ CI/CD pipeline
-│
-├─ app/
-│ ├─ init.py
-│ └─ calculator.py # Sample Python logic
-│
-├─ tests/
-│ └─ test_calculator.py # Unit tests
-│
-├─ deploy.sh # Linux deploy script
-├─ deploy.bat # Windows deploy script
-│
-├─ .flake8 # Linting config
-├─ requirements.txt # Dependencies
-├─ setup.py # Python package config
-└─ README.md # Documentation
+| ![Project Image](image.png) |
 
 # CI/CD Stages in Github actions
 
