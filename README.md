@@ -13,7 +13,7 @@ This project is designed to help understand real-world CI/CD workflows for Pytho
 
 # Project Structure
 
-| ![Project Image](image.png) |
+![Project Image](image.png)
 
 # CI/CD Stages in Github actions
 
