@@ -26,6 +26,24 @@ jobs:
           pip install -r requirements.txt
           pip install -e .
 
+      # # ✅ Black Auto-Formatting Check
+      # - name: Run Black (check formatting)
+      #   run: |
+      #     black --check .
+
+      # ✅ Optional: Auto-format code (only uncomment if you want CI to fix + push)
+      - name: Auto-format with Black
+        run: |
+          black .
+      - name: Commit formatting changes
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-format code with Black" || echo "No changes to commit"
+          git push
+
       - name: Lint Code
         run: flake8 .
 
@@ -34,24 +52,20 @@ jobs:
 
   deploy:
     needs: build-test
-
     runs-on: ubuntu-latest
     # runs-on: windows-latest
-
     if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # ✅ Linux deploy script
       - name: Run Linux Deployment Script
         if: runner.os == 'Linux'
         run: |
           chmod +x deploy.sh
           ./deploy.sh
 
-      # ✅ Windows deploy script
       - name: Run Windows Deployment Script
         if: runner.os == 'Windows'
         run: .\deploy.bat
