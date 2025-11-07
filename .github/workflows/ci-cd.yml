@@ -4,7 +4,7 @@ permissions:
 
 on:
   push:
-    branches: [main, user1, user2]
+    branches: [main, user1, user2, user3]
   pull_request:
     branches: [main]
 
