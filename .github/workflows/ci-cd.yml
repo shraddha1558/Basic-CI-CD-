@@ -4,17 +4,16 @@ permissions:
 
 on:
   push:
-    branches: [main]
+    branches: [main, user1, user2]
   pull_request:
     branches: [main]
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    # runs-on: windows-latest
 
     steps:
-      - name: Checkout Repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -22,52 +21,56 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
+          echo "-------------------------------------------"
+          echo "STEP 1️⃣ : Installing Dependencies"
+          echo "-------------------------------------------"
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -e .
+          echo "✅ Dependencies installed successfully!"
 
-      # #  Black Auto-Formatting Check
-      # - name: Run Black (check formatting)
-      #   run: |
-      #     black --check .
-
-      #  Optional: Auto-format code (only uncomment if you want CI to fix + push)
-      - name: Auto-format with Black
+      - name: Code Formatting (Black)
         run: |
+          echo "-------------------------------------------"
+          echo "STEP 2️⃣ : Running Black Formatter"
+          echo "-------------------------------------------"
           black .
-      - name: Commit formatting changes
-        if: github.ref == 'refs/heads/main'
+          echo "✅ Formatting done!"
+
+      - name: Linting (Flake8)
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git add .
-          git commit -m "Auto-format code with Black" || echo "No changes to commit"
-          git push
+          echo "-------------------------------------------"
+          echo "STEP 3️⃣ : Running Flake8 Linter"
+          echo "-------------------------------------------"
+          flake8 .
+          echo "✅ Linting passed successfully!"
 
-      - name: Lint Code
-        run: flake8 .
-
-      - name: Run Tests
-        run: pytest
+      - name: Running Tests
+        run: |
+          echo "-------------------------------------------"
+          echo "STEP 4️⃣ : Running Tests with Pytest"
+          echo "-------------------------------------------"
+          pytest -v
+          echo "✅ All tests passed successfully!"
 
   deploy:
     needs: build-test
     runs-on: ubuntu-latest
-    # runs-on: windows-latest
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout Repo
+      - name: 🧾 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Run Linux Deployment Script
-        if: runner.os == 'Linux'
+      - name: Deploy Application
         run: |
+          echo "-------------------------------------------"
+          echo "STEP 5️⃣ : Starting Deployment"
+          echo "-------------------------------------------"
+          echo "Deploying branch: $GITHUB_REF"
           chmod +x deploy.sh
           ./deploy.sh
-
-      - name: Run Windows Deployment Script
-        if: runner.os == 'Windows'
-        run: .\deploy.bat
+          echo "✅ Deployment completed successfully!"
+          echo "-------------------------------------------"
