@@ -1,0 +1,50 @@
+name: CI/CD with Rancher and JFrog
+
+on:
+  push:
+    branches: [main, person1, person2]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout your repo
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Set up Python (if you have tests)
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pytest
+
+      # Build Docker Image
+      - name: Build Docker Image
+        run: |
+          docker build -t myapp:${{ github.sha }} .
+
+      # Login to JFrog Docker registry
+      - name: Login to JFrog
+        run: |
+          echo ${{ secrets.JFROG_PASSWORD }} | docker login myrepo.jfrog.io -u ${{ secrets.JFROG_USERNAME }} --password-stdin
+
+      # Push Docker Image to JFrog
+      - name: Push Image to JFrog
+        run: |
+          docker tag myapp:${{ github.sha }} myrepo.jfrog.io/myapp:${{ github.sha }}
+          docker push myrepo.jfrog.io/myapp:${{ github.sha }}
+
+      # Deploy to Kubernetes (using Rancher/Kubectl)
+      - name: Deploy to Kubernetes Cluster
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        run: |
+          kubectl apply -f k8s/deployment.yml
+          kubectl rollout status deployment/myapp
