@@ -52,13 +52,12 @@ jobs:
           echo "-------------------------------------------"
           echo "STEP 4️⃣ : Running Tests with Pytest"
           echo "-------------------------------------------"
-          pytest -v
+          pytest -s
           echo "✅ All tests passed successfully!"
 
   deploy:
     needs: build-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: 🧾 Checkout Repository
